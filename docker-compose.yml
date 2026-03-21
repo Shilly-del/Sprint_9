@@ -1,0 +1,21 @@
+version: '5.1.0'
+
+services:
+  selenium-tests:
+    build: .
+    container_name: test
+    volumes:
+      - ./allure-results:/app/allure-results
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: pytest --alluredir=allure-results -v
+
+    # Ограничения ресурсов
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
