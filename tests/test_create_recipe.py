@@ -1,3 +1,5 @@
+import time
+
 from pages import StartPage, RegPage, SignPage, RecipesPage, CreateRecipePage, CardPage
 
 class TestCreateRecipe:
@@ -28,6 +30,7 @@ class TestCreateRecipe:
         rec.click_create_recipe()
 
         card = CardPage(driver)
+        time.sleep(2)
 
         assert card.check_card()
         assert card.get_title() == recipe.title
