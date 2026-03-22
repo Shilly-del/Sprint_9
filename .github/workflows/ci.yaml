@@ -1,24 +1,37 @@
-name: Selenoid Tests Workflow
-# Перечень событий-триггеров, при которых должен запускаться workflow
+name: Selenoid Sprint_9
 on:
-  # Событие push возникает,
-  # когда изменения исходного кода приходят на сервер GitHub
   push:
     branches:
-      - master
+      - main
       - develop
-# Перечень задач
 jobs:
-  # Единственная задача — склонировать код 
-  # и вывести в консоль дерево файлов
-  checkout-and-print-tree:
+  run-selenoid-tests:
     runs-on: ubuntu-latest
     steps:
-      # На GitHub Actions есть готовые описания шагов, 
-      # их можно использовать в своих workflow.
-      # Применим готовое описание шага для получения исходного кода
-      - name: Check out repository code  # Имя шага задаём сами
-        uses: actions/checkout@v3  # Берём готовое решение из библиотеки GitHub Actions
-      # Выполняем команду tree в текущей директории
-      - name: Print project tree
-        run: tree .
+      - name: Check out repository code  
+        uses: actions/checkout@v3
+      - name: Pull selenoid image
+        run: docker pull selenoid/chrome:128.0
+      - name: Create directories
+        run: |
+          mkdir -p video logs allure-results
+      - name: Run tests in docker
+        run: docker compose up --build --exit-code-from selenium-tests
+      - name: Upload Allure results
+        if: always()  
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path: ./allure-results
+      
+      - name: Upload video logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-videos
+          path: ./video
+      
+      - name: Stop containers
+        if: always()
+        run: docker compose down
+      
