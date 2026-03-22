@@ -9,9 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code  
-        uses: actions/checkout@v3
-      - name: Pull selenoid image
-        run: docker pull selenoid/chrome:128.0
+        uses: actions/checkout@v4
       - name: Create directories
         run: |
           mkdir -p video logs allure-results
@@ -19,14 +17,14 @@ jobs:
         run: docker compose up --build --exit-code-from selenium-tests
       - name: Upload Allure results
         if: always()  
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: ./allure-results
       
       - name: Upload video logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-videos
           path: ./video
