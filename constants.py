@@ -1,5 +1,6 @@
 from pathlib import Path
 
+
 class Url:
     BASE = 'https://foodgram-frontend-1.prakticum-team.ru'
     SIGN_IN = f'{BASE}/signin'
@@ -8,4 +9,5 @@ class Url:
 
 class Path:
     ASSET = Path(__file__).parent / "assets" / "image.jpeg"
+
 

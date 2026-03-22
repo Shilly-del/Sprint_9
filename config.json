@@ -4,12 +4,7 @@
         "versions": {
             "128.0": {
                 "image": "selenoid/chrome:128.0",
-                "port": "4444",
-                "path": "/wd/hub",
-                "video": {
-                    "enabled": true,
-                    "output_dir": "/opt/selenoid/video"
-                }
+                "port": "4444"
             }
         }
     }

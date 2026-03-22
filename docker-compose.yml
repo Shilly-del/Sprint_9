@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   selenoid:
     image: "aerokube/selenoid"
@@ -11,10 +9,6 @@ services:
     volumes:
       - "./config.json:/etc/selenoid/config.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./video:/opt/selenoid/video"
-      - "./logs:/opt/selenoid/logs"
-    environment:
-      - OVERRIDE_VIDEO_OUTPUT_DIR=/opt/selenoid/video
     command: [ "-conf", "/etc/selenoid/config.json", "-container-network", "selenoid" ]
 
   selenoid-ui:
@@ -33,19 +27,14 @@ services:
     container_name: test
     volumes:
       - "./allure-results:/app/allure-results"
-      - "./video:/opt/selenoid/video"
     depends_on:
       - selenoid
     networks:
       - selenoid
     environment:
       - PYTHONUNBUFFERED=1
-      - SELENOID_URI=http://selenoid:4444
     command: pytest --alluredir=allure-results -v
-    mem_limit: 2g
-    cpus: '1.0'
 
 networks:
   selenoid:
-    name: selenoid
     driver: bridge

@@ -1,33 +1,31 @@
 name: Selenoid Sprint_9
+
 on:
   push:
     branches:
       - main
       - develop
+
 jobs:
   run-selenoid-tests:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Check out repository code  
+      - name: Check out repository code
         uses: actions/checkout@v4
+      
       - name: Create directories
-        run: |
-          mkdir -p video logs allure-results
+        run: mkdir -p allure-results
+      
       - name: Run tests in docker
         run: docker compose up --build --exit-code-from selenium-tests
+      
       - name: Upload Allure results
-        if: always()  
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: ./allure-results
-      
-      - name: Upload video logs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-videos
-          path: ./video
       
       - name: Stop containers
         if: always()
