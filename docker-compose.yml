@@ -1,0 +1,40 @@
+services:
+  selenoid:
+    image: "aerokube/selenoid"
+    container_name: selenoid
+    ports:
+      - "4444:4444"
+    networks:
+      - selenoid
+    volumes:
+      - "./config.json:/etc/selenoid/config.json"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command: [ "-conf", "/etc/selenoid/config.json", "-container-network", "selenoid" ]
+
+  selenoid-ui:
+    image: "aerokube/selenoid-ui:latest"
+    container_name: selenoid-ui
+    ports:
+      - "8081:8080"
+    networks:
+      - selenoid
+    depends_on:
+      - selenoid
+    command: [ "--selenoid-uri", "http://selenoid:4444" ]
+
+  selenium-tests:
+    build: .
+    container_name: test
+    volumes:
+      - "./allure-results:/app/allure-results"
+    depends_on:
+      - selenoid
+    networks:
+      - selenoid
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: pytest --alluredir=allure-results -v
+
+networks:
+  selenoid:
+    driver: bridge
