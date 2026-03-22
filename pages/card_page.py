@@ -14,4 +14,11 @@ class CardPage(BasePage):
     def get_title(self):
         return self.find_element(RecipeCardLoc.TITLE).text
 
+    @allure.step('Ждём текст карточки')
+    def wait_title(self, title):
+        '''
+        для воркфлоу, без него слетает тест :(
+        '''
+        self.wait_text(RecipeCardLoc.TITLE, title)
+
 

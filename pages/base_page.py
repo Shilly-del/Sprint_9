@@ -33,6 +33,9 @@ class BasePage():
         file_input = self.find_element(locator)
         file_input.send_keys(str(path))
 
+    def wait_text(self, locator, text):
+           self.wait.until(EC.text_to_be_present_in_element(locator, text))
+
 
 
 

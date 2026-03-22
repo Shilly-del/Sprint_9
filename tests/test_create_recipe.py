@@ -30,7 +30,7 @@ class TestCreateRecipe:
         rec.click_create_recipe()
 
         card = CardPage(driver)
-        time.sleep(2)
+        card.wait_title(recipe.title)
 
         assert card.check_card()
         assert card.get_title() == recipe.title
